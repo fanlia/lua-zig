@@ -18,3 +18,7 @@ require('test').add1(2.1)
 
 - src/ltestlib.c
 - src/ltestlib.zig
+
+## todo?
+
+- rewrite lua by zig step by step
