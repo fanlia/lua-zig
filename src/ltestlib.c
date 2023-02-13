@@ -5,7 +5,7 @@
 #include "lualib.h"
 
 static int add1 (lua_State *L) {
-    lua_pushnumber(L, (luaL_checknumber(L, 1) + 1));
+    lua_pushnumber(L, luaL_checknumber(L, 1) + 1);
     return 1;
 }
 

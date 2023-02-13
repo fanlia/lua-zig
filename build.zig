@@ -57,7 +57,14 @@ pub fn build(b: *std.build.Builder) void {
         exe.addCSourceFile(lua_src ++ c_file, &c_flags);
     }
 
-    exe.addCSourceFile("src/ltestlib.c", &c_flags);
+    // exe.addCSourceFile("src/ltestlib.c", &c_flags);
+
+    const testlib = b.addStaticLibrary("testlib", "src/ltestlib.zig");
+    testlib.setTarget(target);
+    testlib.setBuildMode(mode);
+    testlib.linkLibC();
+    testlib.addIncludePath(lua_src);
+    exe.linkLibrary(testlib);
 
     exe.setOutputDir(".");
     exe.install();
