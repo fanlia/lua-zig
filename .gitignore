@@ -2,3 +2,4 @@ lua-*/
 zig-cache/
 zig-out/
 lua
+luac

@@ -14,6 +14,24 @@ pub fn build(b: *std.build.Builder) void {
     exe.linkLibC();
     exe.addIncludePath(lua_src);
 
+    const exe_luac = b.addExecutable("luac", lua_src ++ "luac.c");
+    exe_luac.setTarget(target);
+    exe_luac.setBuildMode(mode);
+    exe_luac.linkLibC();
+    exe_luac.addIncludePath(lua_src);
+
+    // exe.addCSourceFile("src/ltestlib.c", &c_flags);
+    // exe_luac.addCSourceFile("src/ltestlib.c", &c_flags);
+
+    const testlib = b.addStaticLibrary("testlib", "src/ltestlib.zig");
+    testlib.setTarget(target);
+    testlib.setBuildMode(mode);
+    testlib.linkLibC();
+    testlib.addIncludePath(lua_src);
+
+    exe.linkLibrary(testlib);
+    exe_luac.linkLibrary(testlib);
+
     const lua_c_files = [_][]const u8{
         "lapi.c",
         "lauxlib.c",
@@ -55,19 +73,14 @@ pub fn build(b: *std.build.Builder) void {
 
     inline for (lua_c_files) |c_file| {
         exe.addCSourceFile(lua_src ++ c_file, &c_flags);
+        exe_luac.addCSourceFile(lua_src ++ c_file, &c_flags);
     }
 
-    // exe.addCSourceFile("src/ltestlib.c", &c_flags);
-
-    const testlib = b.addStaticLibrary("testlib", "src/ltestlib.zig");
-    testlib.setTarget(target);
-    testlib.setBuildMode(mode);
-    testlib.linkLibC();
-    testlib.addIncludePath(lua_src);
-    exe.linkLibrary(testlib);
-
     exe.setOutputDir(".");
+    exe_luac.setOutputDir(".");
+
     exe.install();
+    exe_luac.install();
 
     const run_cmd = exe.run();
     run_cmd.step.dependOn(b.getInstallStep());
