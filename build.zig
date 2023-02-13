@@ -57,6 +57,8 @@ pub fn build(b: *std.build.Builder) void {
         exe.addCSourceFile(lua_src ++ c_file, &c_flags);
     }
 
+    exe.addCSourceFile("src/ltestlib.c", &c_flags);
+
     exe.setOutputDir(".");
     exe.install();
 
