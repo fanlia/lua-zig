@@ -5,7 +5,7 @@ const lua = @cImport({
 });
 
 pub fn add1(L: ?*lua.lua_State) callconv(.C) c_int {
-    lua.lua_pushnumber(L, lua.luaL_checknumber(L, @as(c_int, 1)) + @intToFloat(f64, @as(c_int, 1)));
+    lua.lua_pushnumber(L, lua.luaL_checknumber(L, 1) + 1);
     return 1;
 }
 
